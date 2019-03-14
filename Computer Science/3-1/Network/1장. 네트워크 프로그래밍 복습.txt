@@ -1,0 +1,138 @@
+소켓프로그래밍
+서버, 클라이언트로 구분된다.
+
+서버의 역할은? 정보의 주체..
+클라이언트의 역할은, 서버로부터 정보를 받는다! 
+
+서버, 클라이언트의 주소를 도메인이름 혹은 IP + 포트번호
+
+도메인 이름 , IP 큰 틀의 주소
+포트번호, 작은 틀의 주소..개념
+
+사용할 프로토콜,
+TCP - 매우 꼼꼼하다
+연결지향형 
+단계가 많다.
+
+TCP
+서버
+socket()
+bind()
+listen()
+accept() ( 접속 ) 
+send()/recv()
+close()
+
+클라이언트
+socket()
+connect() ( 접속 ) 
+send()/recv() ( 데이터 송수신 ) 
+close()
+
+
+UDP
+서버
+socket()
+bind()
+recvfrom()
+sendto()
+closesocket()
+
+클라이언트
+socket()
+sendto()
+recvfrom()
+closesocket()
+
+
+소켓의 비유와 분류
+TCP 소켓은 전화기에 비유될 수 있다.
+소켓은 socket함수 호출로 생성된다.
+단, 전화기를 거는 용도 소켓, 전화를 수신하는 소켓 생성 방법에 차이가 있다..
+
+int socket(int domain, int type, int protocol);
+성공시 파일 디스크립터 반환, 실패시 -1 반환
+
+소켓의 주소 할당 및 연결
+전화기에 전화번호가 부여되듯이, 소켓에도 주소정보가 할당된다.
+소켓의 주소정보는 IP와 PORT번호로 구성이 된다.
+
+주소 할당 함수 bind();
+bind(int sockfd ( 소켓의 파일디스크립터, sockaddr *myaddr, socklen_t addrlen);
+성공시 0, 실패시 -1 
+
+연결요청이 가능한 상태의 소켓
+연결요청이 가능하게 만드는 함수는 listen()
+전화를 받는 소켓만 호출 필요
+listen(int sockfd, int backlog)
+성공 0 실패 -1
+
+연결 요청의 수락,
+걸려오는 전화에 대해서, 수락의 의미로 수화기를 드는 것에 비유할 수 있다.
+accept();
+accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+성공시 파일디스크립터 반환, 실패시 -1 반환
+이후 데이터 송수신이 가능하다. 
+
+즉, 소켓의 생성 socket() 이후,
+bind()로 소켓의 주소( 포트번호와 ip )를 지정해주고,
+그 다음 listen() 함수로 연결요청을 허락하는 상태가 되고,
+accept()로 연결요청을 수락한다.
+
+연결요청하는 소켓은?
+socket() 이후,
+connect(int sockfd, struct sockaddr *serv_addr, socklen_t addrlen); 
+성공시 0 , 실패시 -1
+
+
+
+=====
+
+저수준 파일 입출력... 
+OS가 제공하는 함수 기반 파일 입출력,
+리눅스는 소켓도 파일로 간주해, 저수준 파일 입출력 함수로 소켓기반 데이터 송수신이 가능하다.
+
+( 소켓과 파일은 비슷하지만 다르다. ) 
+
+파일 디스크립터
+운영체제가 만든 파일을 구분하기 위한 숫자,
+0 표준입력, 1 표준출력 2 표준에러.. 만든다면 이후의 숫자가 될 것이다.
+저수준 파일 입출력 함수는 입출력을 목적으로 파일 디스크립터를 요구,( 인자 값 )
+저수준 파일 입출력 함수에게 소켓의 파일 디스크립터 전달시, 소켓을 대상으로 입출력 진행한다.
+
+
+파일을 열때,
+open(const char *path, int flag);
+반환 값으로 파일디스크립터가 반환된다.
+
+close(fd)하면, 해당 fd 파일디스크립터 부분이 사라진다. 다시 빈칸이 될 것,
+
+write(int fd, const void *buf, size_t nbytes);
+파일에 데이터 쓰기,
+
+파일에 저장된 데이터 읽기 
+ssize_t read(int fd, void *buf, size_t nbytes);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
